@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // 아이콘 사용을 위해 추가
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,17 +32,17 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         child: Stack(
           children: [
-            // Background Image with Gradient Overlay
+            // Background Gradient
             Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Image.asset(
-                'assets/bg_1.jpg',
-                fit: BoxFit.cover,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0x806a11cb), Color(0x802575fc)], // 그라디언트 색상 설정
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
             // Gradient Overlay for a modern look
-
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -54,41 +54,12 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             // Positioned Text with Modern Style
             Positioned(
-              top: 40,
-              left: 20,
-              child: Text(
-                'Giant',
-                style: TextStyle(
-                  fontSize: 140,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white.withOpacity(0.7),
-                  shadows: const [
-                    Shadow(
-                      blurRadius: 10.0,
-                      color: Colors.black54,
-                      offset: Offset(5, 5),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              top: 165,
-              left: 100,
-              child: Text(
-                'Scuba',
-                style: TextStyle(
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white.withOpacity(0.6),
-                  shadows: const [
-                    Shadow(
-                      blurRadius: 10.0,
-                      color: Colors.black54,
-                      offset: Offset(5, 5),
-                    ),
-                  ],
-                ),
+              top: 60,
+              left: 50,
+              child: Container(
+                width: 300,
+                height: 300,
+                child: Image.asset('assets/diverLogo.png'),
               ),
             ),
             SafeArea(
@@ -101,13 +72,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: 200),
-                        // Email Input Field with Glassmorphism Effect
+                        // Email Input Field
                         _buildTextField(
                           label: 'Input Your Email',
                           icon: Icons.email,
                         ),
                         const SizedBox(height: 20),
-                        // Password Input Field with Glassmorphism Effect
+                        // Password Input Field
                         _buildTextField(
                           label: 'Password',
                           icon: Icons.lock,
@@ -123,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 18),
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.black.withOpacity(0.5),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -131,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: const Text(
                             'Login',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
                           ),
                         ),
                         const SizedBox(
@@ -145,19 +116,52 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text.rich(
                               TextSpan(
                                 text: 'Not a member? ',
-                                style: TextStyle(fontSize: 23, color: Colors.white), // Style for the first part
+                                style: TextStyle(fontSize: 23, color: Colors.white),
                                 children: <TextSpan>[
                                   TextSpan(
                                     text: 'Sign up now',
-                                    style: TextStyle(
-                                        fontSize: 23,
-                                        color: Colors.redAccent), // Style for 'Sign up now' with a different color
+                                    style: TextStyle(fontSize: 23, color: Colors.redAccent),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        )
+                        ),
+                        const SizedBox(height: 40),
+                        // Social Media Buttons
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildSocialButton(
+                              icon: FontAwesomeIcons.google,
+                              color: Colors.redAccent,
+                              onTap: () {
+                                // Google 로그인 로직
+                              },
+                            ),
+                            _buildSocialButton(
+                              icon: FontAwesomeIcons.comment,
+                              color: Color(0xFFFEE500), // 카카오 색상
+                              onTap: () {
+                                // 카카오 로그인 로직
+                              },
+                            ),
+                            _buildSocialButton(
+                              icon: FontAwesomeIcons.n,
+                              color: Color(0xFF03C75A), // 네이버 색상
+                              onTap: () {
+                                // 네이버 로그인 로직
+                              },
+                            ),
+                            _buildSocialButton(
+                              icon: FontAwesomeIcons.instagram,
+                              color: Colors.pinkAccent,
+                              onTap: () {
+                                // 인스타그램 로그인 로직
+                              },
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -170,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Custom Text Field Builder with Glassmorphism Effect
+  // Custom Text Field Builder
   Widget _buildTextField({required String label, IconData? icon, bool obscureText = false}) {
     return TextFormField(
       obscureText: obscureText,
@@ -233,15 +237,14 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0), // 모서리를 둥글게
+            borderRadius: BorderRadius.circular(20.0),
           ),
-          backgroundColor: Colors.white, // 배경색을 부드러운 화이트로 설정
+          backgroundColor: Colors.white.withOpacity(0.9),
           child: Padding(
-            padding: const EdgeInsets.all(20.0), // 패딩을 추가하여 공간을 확보
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // 타이틀
                 const Text(
                   'Sign Up',
                   style: TextStyle(
@@ -251,7 +254,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // 텍스트 필드
                 _signUpTextField(
                   label: 'Nick Name',
                   icon: Icons.account_box_rounded,
@@ -267,7 +269,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   icon: Icons.lock_outline,
                 ),
                 const SizedBox(height: 25),
-                // 버튼들
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -275,6 +276,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         FocusScope.of(context).unfocus();
+                        emailFocusNode.dispose();
+                        passwordFocusNode.dispose();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.greenAccent,
@@ -292,6 +295,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         FocusScope.of(context).unfocus();
+                        emailFocusNode.dispose();
+                        passwordFocusNode.dispose();
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -315,5 +320,17 @@ class _LoginScreenState extends State<LoginScreen> {
     ).then((_) {
       FocusScope.of(context).unfocus();
     });
+  }
+
+  // Social Button Builder
+  Widget _buildSocialButton({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return IconButton(
+      icon: FaIcon(icon, color: color, size: 30),
+      onPressed: onTap,
+    );
   }
 }
