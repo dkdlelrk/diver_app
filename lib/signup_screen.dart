@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diver/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // 아이콘 사용을 위해 추가
+import 'package:google_fonts/google_fonts.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -22,6 +22,8 @@ class _SignUpScreen extends State<SignUpScreen> {
   // FocusNode 추가
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
+  final FocusNode nickNameFocusNode = FocusNode();
+  final FocusNode phoneFocusNode = FocusNode();
 
   String nickName = '';
   String email = '';
@@ -29,6 +31,7 @@ class _SignUpScreen extends State<SignUpScreen> {
   String password = '';
 
   final _authentication = FirebaseAuth.instance;
+  final fireStore = FirebaseFirestore.instance;
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -42,6 +45,8 @@ class _SignUpScreen extends State<SignUpScreen> {
     // FocusNode 해제
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
+    nickNameFocusNode.dispose();
+    phoneFocusNode.dispose();
     super.dispose();
   }
 
@@ -54,27 +59,25 @@ class _SignUpScreen extends State<SignUpScreen> {
         },
         child: Stack(
           children: [
-            // Background Gradient
             Container(
+              color: Colors.black87,
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height / 1.5,
               decoration: const BoxDecoration(
+                color: Colors.blueAccent,
                 gradient: LinearGradient(
-                  colors: [Color(0x806a11cb), Color(0x802575fc)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+                  colors: [Colors.deepPurpleAccent, Colors.purpleAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(300),
+                  bottomRight: Radius.circular(0),
                 ),
               ),
             ),
-            // Gradient Overlay for a modern look
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.black.withOpacity(0.3), Colors.black.withOpacity(0.2)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-            ),
-            // 로고 이미지
+
             Positioned(
               top: 60,
               left: 50,
@@ -84,40 +87,6 @@ class _SignUpScreen extends State<SignUpScreen> {
                 child: Image.asset('assets/diverLogo.png'),
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue.withOpacity(0.8), Colors.black54.withOpacity(0.4)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.black54.withOpacity(0.2), Colors.blue.withOpacity(0.9)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 447,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 146,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
-                  /*borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(80),
-                    topLeft: Radius.circular(80),
-                    bottomRight: Radius.circular(0),
-                    bottomLeft: Radius.circular(0),
-                  ),*/
-                ),
-              ),
-            ),
 
             Align(
               alignment: Alignment.center,
@@ -125,21 +94,43 @@ class _SignUpScreen extends State<SignUpScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 200),
-                  Text(
-                    'PADI',
-                    style: TextStyle(
-                      fontSize: 80,
+                  const SizedBox(height: 150),
+                  /*Text(
+                    '       Welcome To',
+                    style: GoogleFonts.quicksand(
+                      fontSize: 45,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.black54,
+                      shadows: [
+                        const Shadow(
+                          offset: Offset(5.0, 5.0),
+                          blurRadius: 12.0,
+                          color: Colors.black45,
+                        ),
+                      ],
+                    ),
+                  ),*/
+                  Text(
+                    '  PADI',
+                    style: GoogleFonts.quicksand(
+                      fontSize: 140,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey,
+                      shadows: [
+                        const Shadow(
+                          offset: Offset(15.0, 15.0),
+                          blurRadius: 20.0,
+                          color: Colors.black,
+                        ),
+                      ],
                     ),
                   ),
                   Text(
                     'Giant Scuba Club',
-                    style: TextStyle(
-                      fontSize: 30,
+                    style: GoogleFonts.quicksand(
+                      fontSize: 45,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.blueGrey,
                     ),
                   ),
                 ],
@@ -155,6 +146,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                   children: [
                     _buildStyledButton(
                       text: 'Login',
+                      color: Colors.white,
                       onPressed: () {
                         // _tryValidation();
                         _showLoginDialog(context);
@@ -163,6 +155,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     const SizedBox(width: 30),
                     _buildStyledButton(
                       text: 'SignUp',
+                      color: Colors.white,
                       onPressed: () {
                         //_tryValidation();
                         _showSignupDialog(context);
@@ -182,24 +175,25 @@ class _SignUpScreen extends State<SignUpScreen> {
   Widget _buildStyledButton({
     required String text,
     required VoidCallback onPressed,
+    required Color color,
   }) {
     return Container(
-      width: 150, // 버튼의 가로 크기 설정
+      width: 150,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          backgroundColor: Colors.black.withOpacity(0.5),
+          backgroundColor: Colors.black,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-            side: const BorderSide(color: Colors.blue, strokeAlign: 10),
+            borderRadius: BorderRadius.circular(40),
+            side: BorderSide(color: color, strokeAlign: 2, width: 5),
           ),
           elevation: 5,
         ),
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 18,
+            fontSize: 30,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -264,9 +258,13 @@ class _SignUpScreen extends State<SignUpScreen> {
                       onPressed: () async {
                         if (loginFormKey.currentState!.validate()) {
                           loginFormKey.currentState!.save();
+
                           try {
+                            final userId = _authentication.currentUser;
                             await _authentication.signInWithEmailAndPassword(
-                                email: email.trim(), password: password.trim());
+                              email: email.trim(),
+                              password: password.trim(),
+                            );
 
                             await Navigator.push(
                               context,
@@ -385,9 +383,18 @@ class _SignUpScreen extends State<SignUpScreen> {
                           if (signUpKey.currentState!.validate()) {
                             signUpKey.currentState!.save();
                             try {
-                              await _authentication.createUserWithEmailAndPassword(
-                                email: email,
-                                password: password,
+                              final userCreate = await _authentication.createUserWithEmailAndPassword(
+                                email: email.trim(),
+                                password: password.trim(),
+                              );
+
+                              await fireStore.collection('users').doc(userCreate.user!.uid).set(
+                                {
+                                  'NickName': nickName,
+                                  'Email': email,
+                                  'PhoneNumber': phone,
+                                  'PassWord': password,
+                                },
                               );
                               Navigator.of(context).pop();
                               emailTextController.clear();
