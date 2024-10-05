@@ -3,7 +3,11 @@ import 'package:diver/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'data/getXState.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -38,6 +42,12 @@ class _SignUpScreen extends State<SignUpScreen> {
     if (isValid) {
       _formKey.currentState!.save();
     }
+  }
+
+  @override
+  void initState() {
+    Get.find<UserDataGetX>().userDataFetch(context);
+    super.initState();
   }
 
   @override
@@ -94,43 +104,40 @@ class _SignUpScreen extends State<SignUpScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 150),
-                  /*Text(
-                    '       Welcome To',
-                    style: GoogleFonts.quicksand(
-                      fontSize: 45,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black54,
-                      shadows: [
-                        const Shadow(
-                          offset: Offset(5.0, 5.0),
-                          blurRadius: 12.0,
-                          color: Colors.black45,
-                        ),
-                      ],
-                    ),
-                  ),*/
-                  Text(
-                    '  PADI',
-                    style: GoogleFonts.quicksand(
-                      fontSize: 140,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueGrey,
-                      shadows: [
-                        const Shadow(
-                          offset: Offset(15.0, 15.0),
-                          blurRadius: 20.0,
-                          color: Colors.black,
-                        ),
-                      ],
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 2.9,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 5,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'PADI',
+                      style: GoogleFonts.quicksand(
+                        fontSize: 140,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: [
+                          const Shadow(
+                            offset: Offset(15.0, 15.0),
+                            blurRadius: 30.0,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Text(
-                    'Giant Scuba Club',
-                    style: GoogleFonts.quicksand(
-                      fontSize: 45,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueGrey,
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 5,
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'Giant scuba club',
+                      style: GoogleFonts.quicksand(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
@@ -185,15 +192,15 @@ class _SignUpScreen extends State<SignUpScreen> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           backgroundColor: Colors.black,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-            side: BorderSide(color: color, strokeAlign: 2, width: 5),
+            borderRadius: BorderRadius.circular(15),
+            side: BorderSide(color: color, strokeAlign: 2, width: 2.5),
           ),
           elevation: 5,
         ),
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 30,
+            fontSize: 20,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -243,6 +250,20 @@ class _SignUpScreen extends State<SignUpScreen> {
                     ],
                   ),
                 ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text('자동 로그인'),
+                    /*Obx(
+                      () => Switch(
+                        value: Get.find<UserDataGetX>().isFirstAutoLogin.value,
+                        onChanged: (value) {
+                          Get.find<UserDataGetX>().isSwitchChanged(value);
+                        },
+                      ),
+                    ),*/
+                  ],
+                ),
                 TextButton(
                   onPressed: () {},
                   child: const Text("Forgot Your Password?"),
@@ -260,7 +281,6 @@ class _SignUpScreen extends State<SignUpScreen> {
                           loginFormKey.currentState!.save();
 
                           try {
-                            final userId = _authentication.currentUser;
                             await _authentication.signInWithEmailAndPassword(
                               email: email.trim(),
                               password: password.trim(),

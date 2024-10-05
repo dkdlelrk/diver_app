@@ -11,13 +11,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // FocusNode 추가
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
 
   @override
   void dispose() {
-    // FocusNode 해제
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
     super.dispose();
@@ -135,30 +133,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             _buildSocialButton(
                               icon: FontAwesomeIcons.google,
                               color: Colors.redAccent,
-                              onTap: () {
-                                // Google 로그인 로직
-                              },
+                              onTap: () {},
                             ),
                             _buildSocialButton(
                               icon: FontAwesomeIcons.comment,
-                              color: Color(0xFFFEE500), // 카카오 색상
-                              onTap: () {
-                                // 카카오 로그인 로직
-                              },
+                              color: const Color(0xFFFEE500),
+                              onTap: () {},
                             ),
                             _buildSocialButton(
                               icon: FontAwesomeIcons.n,
-                              color: Color(0xFF03C75A), // 네이버 색상
-                              onTap: () {
-                                // 네이버 로그인 로직
-                              },
+                              color: const Color(0xFF03C75A),
+                              onTap: () {},
                             ),
                             _buildSocialButton(
                               icon: FontAwesomeIcons.instagram,
                               color: Colors.pinkAccent,
-                              onTap: () {
-                                // 인스타그램 로그인 로직
-                              },
+                              onTap: () {},
                             ),
                           ],
                         ),

@@ -12,12 +12,6 @@ class UserDataGetX extends GetxController {
   var isLoading = false.obs;
   var isFirstAutoLogin = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // isBoolLogin();
-  }
-
   Future<void> userDataFetch(BuildContext context) async {
     isLoading.value = true;
     try {
